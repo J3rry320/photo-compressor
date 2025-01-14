@@ -1,8 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
+const clc = require("cli-color");
+const { logger } = require("../utils/logger");
 
-const { logger } = require("../utils/logger.js");
+let totalSavings = 0; // Global variable to track total file savings
+
 /**
  *
  * @param {string} dir - The path to the image files
@@ -10,6 +13,8 @@ const { logger } = require("../utils/logger.js");
  * @returns
  */
 async function scanAndOptimize(dir, outputDir) {
+  const startTime = Date.now(); // Start timer
+
   if (!fs.existsSync(dir)) {
     logger.error(`Directory not found: ${dir}`);
     return;
@@ -24,7 +29,7 @@ async function scanAndOptimize(dir, outputDir) {
     );
 
   if (!files.length) {
-    logger.warn("No valid image files found for optimization.");
+    logger.warning("No valid image files found for optimization.");
     return;
   }
 
@@ -36,28 +41,68 @@ async function scanAndOptimize(dir, outputDir) {
   await Promise.all(
     files.map(async (file) => {
       const filePath = path.join(dir, file);
-      const outputFilePath = path.join(
+      let outputFilePath = path.join(
         outputDir,
         `${path.basename(file, path.extname(file))}.webp`
       );
+      if (fs.existsSync(outputFilePath)) {
+        outputFilePath = path.join(
+          outputDir,
+          `${path.basename(file, path.extname(file))}_compressed.webp`
+        );
+      }
 
       try {
+        const originalSize = fs.statSync(filePath).size;
+
         await sharp(filePath)
           .webp({
             quality: 85, // Adjust quality level
             effort: 6, // Compression effort
             nearLossless: true, // Preserve near-original quality
           })
-          .toFile(outputFilePath);
+          .toFile(outputFilePath, { withoutMetadata: true });
 
-        logger.info(`Optimized and compressed: ${file} -> ${outputFilePath}`);
+        const optimizedSize = fs.statSync(outputFilePath).size;
+        const sizeDifference = originalSize - optimizedSize;
+        const percentageSaved = Math.round(
+          (sizeDifference / originalSize) * 100
+        );
+
+        // Update total savings
+        totalSavings += sizeDifference;
+
+        logger.success(
+          `🎉 Optimized and compressed: ${file} -> ${outputFilePath} | Original: ${Math.round(
+            originalSize / 1024
+          )} KB Optimized: ${Math.round(
+            optimizedSize / 1024
+          )} KB Saved: ${Math.round(
+            sizeDifference / 1024
+          )} KB (${percentageSaved}%)`
+        );
       } catch (error) {
-        logger.error(`Error optimizing ${file}: ${error.message}`);
+        logger.error(`❌ Error optimizing ${file}: ${error.message}`);
       }
     })
   );
 
-  logger.info("Batch optimization completed.");
+  const endTime = Date.now(); // End timer
+  const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Calculate time taken in seconds
+
+  logger.success("\nBatch optimization completed! 🚀\n");
+  const savingsText = `${totalSavings} bytes (${Math.round(
+    totalSavings / 1024
+  )} KB / ${Math.round(totalSavings / 1024 / 1024)} MB)`;
+  const timeText = `${timeTaken} seconds`;
+  const filesText = `${files.length} files`;
+  logger.art(
+    `Optimization Summary:\n\nTotal savings: ${clc.yellowBright.bold(
+      savingsText
+    )}\n\nTime taken: ${clc.cyanBright.bold(
+      timeText
+    )}\n\nFiles processed: ${clc.greenBright.bold(filesText)}`
+  );
 }
 
 module.exports = { scanAndOptimize };
