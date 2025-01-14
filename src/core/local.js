@@ -3,6 +3,7 @@ const path = require("path");
 const sharp = require("sharp");
 const clc = require("cli-color");
 const { logger } = require("../utils/logger");
+const { compressImage } = require("../utils/compress");
 
 let totalSavings = 0; // Global variable to track total file savings
 
@@ -55,13 +56,7 @@ async function scanAndOptimize(dir, outputDir) {
       try {
         const originalSize = fs.statSync(filePath).size;
 
-        await sharp(filePath)
-          .webp({
-            quality: 85, // Adjust quality level
-            effort: 6, // Compression effort
-            nearLossless: true, // Preserve near-original quality
-          })
-          .toFile(outputFilePath, { withoutMetadata: true });
+        await compressImage(filePath, outputFilePath);
 
         const optimizedSize = fs.statSync(outputFilePath).size;
         const sizeDifference = originalSize - optimizedSize;
