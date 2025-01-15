@@ -4,6 +4,7 @@
  * @param {string} outputFilePath - The output file path to save the compressed image
  * @returns {Promise} - The compressed image buffer
  */
+const sharp = require("sharp");
 async function compressImage(image, outputFilePath) {
   const compressedImage = await sharp(image)
     .webp({

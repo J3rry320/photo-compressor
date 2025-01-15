@@ -9,7 +9,7 @@
 [![stars](https://img.shields.io/github/stars/J3rry320/photo-compressor?color=brightgreen&label=stars&logo=github)](https://github.com/J3rry320/photo-compressor/stargazers)
 [![contributors](https://img.shields.io/github/contributors/J3rry320/photo-compressor?label=contributors&logo=github)](https://github.com/J3rry320/photo-compressor/graphs/contributors)
 [![last commit](https://img.shields.io/github/last-commit/J3rry320/photo-compressor?color=yellow&label=last%20commit&logo=git)](https://github.com/J3rry320/photo-compressor/commits/main)
-
+![Code Coverage](https://img.shields.io/badge/Coverage-90.9%25-brightgreen)
 
 
 

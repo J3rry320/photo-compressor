@@ -45,6 +45,7 @@ function randomFigletText(text) {
   const randomFont =
     legibleFonts[Math.floor(Math.random() * legibleFonts.length)];
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
   return `\n ${randomColor(
     figlet.textSync(text, {
       font: randomFont,

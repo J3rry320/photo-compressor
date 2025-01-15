@@ -1,20 +1,74 @@
 {
   "name": "photo-compressor",
+  "description": "photo-compressor is a command-line tool to optimize and compress images locally or from the cloud. It leverages the power of sharp to convert images to webp format and compress them, ensuring efficient and hassle-free image optimization for web developers.",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "source": "bin/photo-compressor",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bin/photo-compressor.js"
+    "test": "jest --coverage --coverageReporters='json-summary'  && node ./src/utils/generateCoverageBadge.js",
+    "start": "node bin/photo-compressor.js",
+    "build": "webpack --config webpack.config.js",
+    "prepublish": "npm run build"
   },
-  "keywords": [],
-  "author": "Jerry Satpathy",
-  "license": "ISC",
-  "description": "",
+  "bin": {
+    "photo-compressor": "./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/J3rry320/photo-compressor"
+  },
+  "bugs": {
+    "url": "https://github.com/J3rry320/photo-compressor/issues"
+  },
+  "homepage": "https://github.com/J3rry320/photo-compressor#readme",
+  "keywords": [
+    "photo-compressor",
+    "image-optimizer",
+    "image-compression",
+    "webp",
+    "sharp",
+    "image-conversion",
+    "cli",
+    "command-line-tool",
+    "image-processing",
+    "batch-image-compression",
+    "local-image-optimization",
+    "cloud-image-optimization",
+    "image-optimization",
+    "image-size-reduction",
+    "web-development",
+    "image-converter",
+    "jpeg",
+    "png",
+    "gif",
+    "file-size-reduction"
+  ],
+  "author": "Jerry Satpathy <rutuparna.satpathy01@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.7.9",
     "cli-color": "^2.0.4",
     "commander": "^13.0.0",
     "figlet": "^1.8.0",
     "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "terser-webpack-plugin": "^5.3.11",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "files": [
+    "dist/"
+  ],
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "text",
+      "lcov"
+    ]
   }
 }

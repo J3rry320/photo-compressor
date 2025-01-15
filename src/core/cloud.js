@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
-const sharp = require("sharp");
+const clc = require("cli-color");
+
 const { logger } = require("../utils/logger.js");
 const { compressImage } = require("../utils/compress.js");
 let totalSavings = 0; // Global variable to track total file savings
@@ -50,6 +51,7 @@ async function fetchAndOptimizeCloudImages(url, outputDir = "../optimized") {
     totalSavings / 1024
   )} KB / ${Math.round(totalSavings / 1024 / 1024)} MB)`;
   const timeText = `${timeTaken} seconds`;
+  const filesText = Array.isArray(url) ? `${url.length} files` : `1 file`;
   logger.art(
     `Optimization Summary:\n\nTotal savings: ${clc.yellowBright.bold(
       savingsText
@@ -88,7 +90,7 @@ async function processImage(imageUrl, outputDir) {
     const percentageSaved = Math.round((sizeDifference / originalSize) * 100); // Update global counters
     totalSavings += sizeDifference;
     totalFiles += 1;
-    loggerUtil.success(
+    logger.success(
       `🎉 Optimized and compressed: ${imageUrl} -> ${outputFilePath} | Original: ${Math.round(
         originalSize / 1024
       )} KB Optimized: ${Math.round(
@@ -98,9 +100,11 @@ async function processImage(imageUrl, outputDir) {
       )} KB (${percentageSaved}%)`
     );
   } catch (error) {
-    loggerUtil.error(`❌ Error optimizing ${imageUrl}: ${error.message}`);
+    logger.error(`❌ Error optimizing ${imageUrl}: ${error.message}`);
   }
 }
 module.exports = {
   fetchAndOptimizeCloudImages,
+  processImage,
+  isValidImageURL,
 };

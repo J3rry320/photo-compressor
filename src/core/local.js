@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const sharp = require("sharp");
+
 const clc = require("cli-color");
 const { logger } = require("../utils/logger");
 const { compressImage } = require("../utils/compress");
@@ -21,13 +21,15 @@ async function scanAndOptimize(dir, outputDir = "../optimized") {
     return;
   }
 
-  const files = fs
-    .readdirSync(dir)
-    .filter((file) =>
+const files = fs
+  .readdirSync(dir)
+  .filter(
+    (file) =>
+      file != null &&
       [".jpg", ".jpeg", ".png", ".gif", ".webp"].includes(
         path.extname(file).toLowerCase()
       )
-    );
+  );
 
   if (!files.length) {
     logger.warning("No valid image files found for optimization.");
