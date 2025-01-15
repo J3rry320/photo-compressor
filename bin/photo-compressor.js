@@ -24,9 +24,9 @@ program
     "./optimized"
   )
   .action(async (options) => {
-    logger.info("Starting local optimization...");
+    logger.info("✨ Starting local optimization...");
     await scanAndOptimize(options.dir, options.output);
-    logger.info("Local optimization completed.");
+    logger.info("✅ Local optimization completed.");
   });
 
 program
@@ -34,7 +34,7 @@ program
   .description("Optimize images from a URL or a directory URL")
   .option(
     "-u, --url <url>",
-    "URL of the image or directory of images to optimize"
+    "URL of the image or an array of images to compress"
   )
   .option(
     "-o, --output <path>",
@@ -42,9 +42,9 @@ program
     "./optimized"
   )
   .action(async (options) => {
-    logger.info("Starting cloud optimization...");
+    logger.info("✨ Starting cloud optimization...");
     await fetchAndOptimizeCloudImages(options.url, options.output);
-    logger.info("Cloud optimization completed.");
+    logger.info("✅ Cloud optimization completed.");
   });
 
 program.parse(process.argv);

@@ -13,7 +13,7 @@ let totalSavings = 0; // Global variable to track total file savings
  * @param {string} outputDir - The path to store the compressed and converted image files
  * @returns
  */
-async function scanAndOptimize(dir, outputDir) {
+async function scanAndOptimize(dir, outputDir = "../optimized") {
   const startTime = Date.now(); // Start timer
 
   if (!fs.existsSync(dir)) {

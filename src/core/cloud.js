@@ -11,7 +11,7 @@ let totalFiles = 0; // Global variable to track total number of files processed
  * @param {string} url - Either a single URL or an array of URL's of the image  containing images.
  * @param {string} outputDir - Directory to save optimized images.
  */
-async function fetchAndOptimizeCloudImages(url, outputDir) {
+async function fetchAndOptimizeCloudImages(url, outputDir = "../optimized") {
   const startTime = Date.now();
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
